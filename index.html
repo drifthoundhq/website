@@ -46,7 +46,7 @@ title: DriftHound - A Watchdog for Your Infrastructure State
       <div class="content-text">
         <h3>Infrastructure Drift Detection Made Simple</h3>
         <p>
-          DriftHound monitors your Terraform, OpenTofu, and Terragrunt infrastructure for drift—
+          DriftHound monitors your Terraform, OpenTofu, and Terragrunt infrastructure for drift,
           detecting when your actual infrastructure state diverges from your declared configuration.
         </p>
         <ul class="feature-list">
@@ -109,6 +109,43 @@ title: DriftHound - A Watchdog for Your Infrastructure State
         <div class="feature-icon">📈</div>
         <h3>Historical Data</h3>
         <p>Store and track drift check history per project. Compare checks and identify patterns.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Charts Dashboard Section -->
+<section class="section-charts" id="charts">
+  <div class="container">
+    <div class="section-header">
+      <h2>Charts & Analytics</h2>
+      <p class="section-subtitle">Visual insights into your infrastructure health with interactive charts</p>
+    </div>
+
+    <div class="content-grid">
+      <div class="content-video">
+        <video autoplay muted loop playsinline class="demo-video">
+          <source src="{{ '/assets/videos/demo-charts.mp4' | relative_url }}" type="video/mp4">
+          <!-- Fallback to screenshot if video not supported -->
+          <img src="{{ '/assets/images/charts-screenshot.png' | relative_url }}"
+               alt="DriftHound Charts Dashboard"
+               class="screenshot">
+        </video>
+      </div>
+
+      <div class="content-text">
+        <h3>Comprehensive Visual Analytics</h3>
+        <p>
+          The Charts Dashboard provides interactive charts to help you understand and monitor
+          infrastructure drift across all your projects and environments.
+        </p>
+        <ul class="feature-list">
+          <li>Status distribution and stability score</li>
+          <li>Drift trends over time</li>
+          <li>Resource change tracking</li>
+          <li>Per-environment breakdowns</li>
+          <li>Performance monitoring</li>
+        </ul>
       </div>
     </div>
   </div>
