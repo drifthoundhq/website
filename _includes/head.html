@@ -5,9 +5,26 @@
 
   {% seo %}
 
-  <link rel="icon" type="image/x-icon" href="{{ '/assets/images/favicon/favicon.ico' | relative_url }}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/images/favicon/favicon-32x32.png' | relative_url }}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/images/favicon/favicon-16x16.png' | relative_url }}">
+  <!-- Organization structured data for Google logo display -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "{{ site.title }}",
+    "url": "{{ site.url }}",
+    "logo": "{{ site.url }}/assets/images/drifthound_logo.png",
+    "description": "{{ site.description }}",
+    "sameAs": [
+      "https://github.com/treezio/DriftHound"
+    ]
+  }
+  </script>
+
+  <link rel="icon" type="image/png" sizes="96x96" href="{{ '/assets/images/favicon/favicon-96x96.png' | relative_url }}">
+  <link rel="icon" type="image/svg+xml" href="{{ '/assets/images/favicon/favicon.svg' | relative_url }}">
+  <link rel="shortcut icon" href="{{ '/favicon.ico' | relative_url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/images/favicon/apple-touch-icon.png' | relative_url }}">
+  <link rel="manifest" href="{{ '/site.webmanifest' | relative_url }}">
 
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 </head>
