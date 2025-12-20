@@ -39,11 +39,11 @@ twitter:
 social:
   name: DriftHound
   links:
-    - https://github.com/treezio/DriftHound
+    - https://github.com/drifthoundhq/drifthound
 
 # Links
-github_repo: "https://github.com/treezio/DriftHound"
-github_docs: "https://github.com/treezio/DriftHound?tab=readme-ov-file#documentation"
-github_action: "https://github.com/treezio/drifthound-action"
-helm_chart: "https://github.com/treezio/helm-chart-drifthound"
-docker_image: "ghcr.io/treezio/drifthound"
+github_repo: "https://github.com/drifthoundhq/drifthound"
+github_docs: "https://github.com/drifthoundhq/drifthound?tab=readme-ov-file#documentation"
+github_action: "https://github.com/drifthoundhq/drifthound-action"
+helm_chart: "https://github.com/drifthoundhq/helm-chart"
+docker_image: "ghcr.io/drifthoundhq/drifthound"
