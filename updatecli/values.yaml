@@ -1,8 +1,8 @@
 github:
-  user: "treeziops"
-  email: "updatecli-bot@treeziops.io"
-  username: "treeziops"
+  user: "drifthoundhq"
+  email: "updatecli-bot@drifthound.io"
+  username: "drifthound-bot"
   token: "GITHUB_TOKEN"
   branch: "main"
-  owner: "treezio"
+  owner: "drifthoundhq"
   repository: "drifthound-website"
