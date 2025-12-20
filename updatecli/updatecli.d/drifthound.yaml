@@ -1,0 +1,55 @@
+---
+name: Bump DriftHound version
+
+pipelineid: "drifthound"
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ .github.owner }}"
+      repository: "{{ .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+
+sources:
+  latestVersion:
+    kind: githubrelease
+    name: Get the latest DriftHound version
+    spec:
+      owner: treezio
+      repository: drifthound
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      versionfilter:
+        kind: semver
+
+conditions:
+  IsDockerImagePublished:
+    name: Check DriftHound {{ source "latestVersion" }} docker image tag exists in DockerHub
+    kind: dockerimage
+    spec:
+      image: ghcr.io/drifthoundhq/drifthound
+      architecture: amd64
+
+targets:
+  appVersionConfig:
+    name: Update application version for DriftHound to {{ source "latestVersion" }} version.
+    kind: yaml
+    spec:
+      file: _config.yaml
+      key: $.appVersion
+    scmid: default
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    title: Bump DriftHound version to {{ source "latestVersion" }}
+    spec:
+      labels:
+        - dependencies
+        - appversion

@@ -171,7 +171,7 @@ title: DriftHound - A Watchdog for Your Infrastructure State
         <h3>GitHub Actions Integration</h3>
         <p>Add DriftHound to your workflow:</p>
         <pre><code>- name: Run drift detection
-  uses: treezio/drifthound-action@v1
+  uses: drifthoundhq/drifthound-action@v1
   with:
     drifthound-url: $&#123;&#123; secrets.DRIFTHOUND_URL &#125;&#125;
     drifthound-token: $&#123;&#123; secrets.DRIFTHOUND_TOKEN &#125;&#125;</code></pre>
@@ -208,7 +208,7 @@ docker-compose up -d</code></pre>
       <div class="tab-content" data-tab-content="cli">
         <h3>CLI Usage</h3>
         <p>Install and use the DriftHound CLI:</p>
-        <pre><code>curl -L https://raw.githubusercontent.com/treezio/DriftHound/main/bin/drifthound-cli \
+        <pre><code>curl -L https://raw.githubusercontent.com/drifthoundhq/drifthound/main/bin/drifthound-cli \
   -o /usr/local/bin/drifthound && chmod +x /usr/local/bin/drifthound
 
 drifthound --tool=terraform \
