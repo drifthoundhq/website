@@ -1,0 +1,22 @@
+<aside class="docs-sidebar">
+  <nav class="docs-nav" aria-label="Documentation navigation">
+    {% for section in site.data.docs_nav.sections %}
+    <div class="docs-nav-section">
+      <h3 class="docs-nav-title">
+        <span class="docs-nav-icon">{{ section.icon }}</span>
+        {{ section.title }}
+      </h3>
+      <ul class="docs-nav-list">
+        {% for page_item in section.pages %}
+        <li class="docs-nav-item">
+          <a href="{{ page_item.url | relative_url }}"
+             class="docs-nav-link {% if page.url == page_item.url %}active{% endif %}">
+            {{ page_item.title }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </nav>
+</aside>

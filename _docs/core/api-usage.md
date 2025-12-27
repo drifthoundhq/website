@@ -1,0 +1,221 @@
+---
+layout: docs
+title: "API Usage"
+category: "core"
+order: 2
+description: "Learn how to interact with the DriftHound API"
+toc: true
+source_repo: "DriftHound"
+source_path: "/Users/trz/workspace/treezio/drifthound-web/../drifthound-source/docs/api-usage.md"
+last_synced: "2025-12-27"
+---
+
+# API Usage
+
+DriftHound provides a RESTful API for submitting Terraform drift check results.
+
+## Authentication
+
+All API requests require authentication using a Bearer token in the `Authorization` header:
+
+```bash
+Authorization: Bearer YOUR_API_TOKEN
+```
+
+See [API Token Management](#api-token-management) for details on generating tokens.
+
+## Endpoints
+
+### Submit a Drift Check
+
+Submit the results of a Terraform drift check for a specific project and environment.
+
+**Endpoint:** `POST /api/v1/projects/:project_key/environments/:environment_key/checks`
+
+**Example Request:**
+
+```bash
+curl -X POST \
+  http://localhost:3000/api/v1/projects/my-project/environments/my-env/checks \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "drift",
+    "add_count": 2,
+    "change_count": 1,
+    "destroy_count": 0,
+    "duration": 8.2,
+    "raw_output": "Plan: 2 to add, 1 to change, 0 to destroy.",
+    "directory": "infra/terraform/production",
+    "repository": "https://github.com/myorg/infrastructure",
+    "branch": "master"
+  }'
+```
+
+### Request Parameters
+
+#### URL Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `project_key` | string | Yes | Unique identifier for the project (alphanumeric, dashes, underscores) |
+| `environment_key` | string | Yes | Unique identifier for the environment (alphanumeric, dashes, underscores) |
+
+#### Body Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `status` | string | Yes | One of: `ok`, `drift`, `error`, `unknown` |
+| `add_count` | integer | No | Number of resources to add |
+| `change_count` | integer | No | Number of resources to change |
+| `destroy_count` | integer | No | Number of resources to destroy |
+| `duration` | float | No | Execution duration in seconds |
+| `raw_output` | text | No | Full Terraform plan output |
+| `directory` | string | No | Directory where Terraform is executed. Only set on first call; subsequent calls won't overwrite. Update via GUI. |
+| `repository` | string | No | Repository URL (e.g., `https://github.com/org/repo`). Only set on first call; subsequent calls won't overwrite. Update via GUI. |
+| `branch` | string | No | Repository branch (default: `main`). Only set on first call if different from default; update via GUI. |
+| `notification_channel` | object | No | Optional notification channel configuration (see [Advanced Features](#advanced-features)) |
+
+### Response
+
+**Success Response (201 Created):**
+
+```json
+{
+  "id": 123,
+  "project_key": "my-project",
+  "environment_key": "my-env",
+  "status": "drift",
+  "created_at": "2025-11-27T10:30:00Z"
+}
+```
+
+**Error Responses:**
+
+- `401 Unauthorized` - Missing or invalid API token
+- `422 Unprocessable Entity` - Invalid status value or validation error
+
+### Status Values
+
+| Status | Description |
+|--------|-------------|
+| `ok` | No drift detected - infrastructure matches state |
+| `drift` | Drift detected - changes pending |
+| `error` | Error running drift check |
+| `unknown` | Initial state or unable to determine |
+
+## Advanced Features
+
+### Notification Channel Configuration
+
+You can optionally configure Slack notification channels per environment via the API:
+
+```bash
+curl -X POST \
+  http://localhost:3000/api/v1/projects/my-project/environments/production/checks \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "drift",
+    "add_count": 2,
+    "change_count": 1,
+    "destroy_count": 0,
+    "notification_channel": {
+      "channel_type": "slack",
+      "enabled": true,
+      "config": {
+        "channel": "#custom-alerts"
+      }
+    }
+  }'
+```
+
+**Notification Channel Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `channel_type` | string | Yes | Currently only `"slack"` is supported |
+| `enabled` | boolean | No | Enable or disable notifications for this environment |
+| `config.channel` | string | No | Slack channel name (e.g., `"#alerts"`). Falls back to global default if not provided |
+
+**Notes:**
+- The Slack token is always taken from the global configuration (`SLACK_BOT_TOKEN` or `config/notifications.yml`)
+- This allows you to override the notification channel per environment without exposing tokens in API requests
+- See [Slack Notifications documentation](slack-notifications.md) for more details on notification setup
+
+## API Token Management
+
+DriftHound provides a web-based interface for managing API tokens. Only admin users can create and manage tokens.
+
+### Using the Web UI (Recommended)
+
+1. Log in as an admin user
+2. Click **API Tokens** in the navigation bar
+3. Enter a name for your token (e.g., "CI/CD Pipeline") and click **Create Token**
+4. **Important:** Copy the token immediately - it will only be shown once!
+
+The API Tokens page also displays:
+- A list of all existing tokens with partial token previews
+- Creation dates for each token
+- Delete buttons to revoke tokens
+- Usage examples showing how to authenticate API requests
+
+### Token Security
+
+- Tokens are only displayed once at creation time
+- Store tokens securely (e.g., in CI/CD secrets, environment variables)
+- Use descriptive names to identify token purposes
+- Revoke tokens that are no longer needed
+
+## Health Check Endpoint
+
+DriftHound provides a health check endpoint for load balancers and monitoring systems:
+
+**Endpoint:** `GET /up`
+
+**Response:**
+- `200 OK` - Application is healthy
+- `500 Internal Server Error` - Application failed to boot
+
+**Note:** Health check requests are not logged in production to prevent log clutter.
+
+## Best Practices
+
+1. **Use descriptive project and environment keys** - Use kebab-case names like `infrastructure-prod` rather than cryptic codes
+2. **Always include raw_output** - Helps with debugging and provides detailed context in the dashboard
+3. **Set appropriate durations** - Helps track performance over time
+4. **Use environment variables for tokens** - Never hardcode tokens in scripts
+5. **Configure notifications per environment** - Use different Slack channels for production vs. staging alerts
+
+## Example Integration
+
+### GitHub Actions
+
+```yaml
+- name: Check Terraform Drift
+  run: |
+    drifthound --tool=terraform \
+      --project=my-infrastructure \
+      --environment=production \
+      --token=${{ secrets.DRIFTHOUND_TOKEN }} \
+      --api-url=${{ secrets.DRIFTHOUND_URL }} \
+      --dir=./terraform
+```
+
+### GitLab CI
+
+```yaml
+drift_check:
+  script:
+    - drifthound --tool=terraform
+        --project=my-infrastructure
+        --environment=production
+        --token=$DRIFTHOUND_TOKEN
+        --api-url=$DRIFTHOUND_URL
+        --dir=./terraform
+```
+
+## See Also
+
+- [CLI Usage Guide](cli-usage.md) - For automated drift checking in CI/CD
+- [Slack Notifications](slack-notifications.md) - Configure Slack alerts

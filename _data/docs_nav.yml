@@ -1,0 +1,40 @@
+sections:
+  - title: "Getting Started"
+    id: "getting-started"
+    icon: "🚀"
+    pages:
+      - title: "Introduction"
+        url: "/docs/getting-started/"
+
+  - title: "DriftHound Core"
+    id: "core"
+    icon: "🐕"
+    pages:
+      - title: "Configuration"
+        url: "/docs/core/configuration/"
+      - title: "API Usage"
+        url: "/docs/core/api-usage/"
+      - title: "CLI Usage"
+        url: "/docs/core/cli-usage/"
+      - title: "Slack Notifications"
+        url: "/docs/core/slack-notifications/"
+
+  - title: "GitHub Action"
+    id: "github-action"
+    icon: "⚡"
+    pages:
+      - title: "Quick Start"
+        url: "/docs/github-action/quickstart/"
+      - title: "Authentication"
+        url: "/docs/github-action/environment-auth/"
+      - title: "Testing"
+        url: "/docs/github-action/testing/"
+      - title: "Contributing"
+        url: "/docs/github-action/contributing/"
+
+  - title: "Development"
+    id: "development"
+    icon: "🔧"
+    pages:
+      - title: "CLI Improvements"
+        url: "/docs/development/cli-improvements/"

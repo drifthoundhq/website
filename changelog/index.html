@@ -3,14 +3,154 @@ layout: default
 title: Changelog
 ---
 
-<section class="section-changelog" style="padding: 6rem 0; text-align: center;">
-  <div class="container">
-    <h1 style="margin-bottom: 1rem;">Changelog</h1>
-    <p style="font-size: 1.125rem; color: #6b7280; margin-bottom: 2rem;">
-      View the complete changelog on GitHub.
-    </p>
-    <a href="{{ site.github_repo }}/blob/main/CHANGELOG.md" class="btn-primary btn-large" target="_blank" rel="noopener">
-      View Changelog on GitHub
-    </a>
+<section class="changelog-section" style="padding: 4rem 2rem;">
+  <div class="container" style="max-width: 900px;">
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <h1 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem;">Changelog</h1>
+      <p style="font-size: 1.25rem; color: #6b7280;">
+        Track all changes, improvements, and bug fixes across DriftHound projects.
+      </p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="changelog-tabs" style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #e5e7eb;">
+      <button class="tab-btn active" data-tab="drifthound" style="padding: 1rem 1.5rem; background: none; border: none; border-bottom: 2px solid transparent; font-size: 1rem; font-weight: 500; cursor: pointer; color: #6b7280; transition: all 0.2s; margin-bottom: -2px;">
+        DriftHound
+      </button>
+      <button class="tab-btn" data-tab="github-action" style="padding: 1rem 1.5rem; background: none; border: none; border-bottom: 2px solid transparent; font-size: 1rem; font-weight: 500; cursor: pointer; color: #6b7280; transition: all 0.2s; margin-bottom: -2px;">
+        GitHub Action
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content active" data-tab-content="drifthound" style="display: block;">
+      {% assign drifthound_changelog = site.changelog | where: "title", "DriftHound Changelog" | first %}
+      {% if drifthound_changelog %}
+        <div class="changelog-content" style="line-height: 1.7;">
+          {{ drifthound_changelog.content }}
+        </div>
+      {% else %}
+        <div style="text-align: center; padding: 3rem; color: #6b7280;">
+          <p>DriftHound changelog will be available here soon.</p>
+          <a href="{{ site.github_repo }}/blob/main/CHANGELOG.md" target="_blank" rel="noopener" style="color: #4f46e5; text-decoration: none; font-weight: 500;">
+            View on GitHub →
+          </a>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="tab-content" data-tab-content="github-action" style="display: none;">
+      {% assign action_changelog = site.changelog | where: "title", "GitHub Action Changelog" | first %}
+      {% if action_changelog %}
+        <div class="changelog-content" style="line-height: 1.7;">
+          {{ action_changelog.content }}
+        </div>
+      {% else %}
+        <div style="text-align: center; padding: 3rem; color: #6b7280;">
+          <p>GitHub Action changelog will be available here soon.</p>
+          <a href="{{ site.github_action }}/blob/main/docs/CHANGELOG.md" target="_blank" rel="noopener" style="color: #4f46e5; text-decoration: none; font-weight: 500;">
+            View on GitHub →
+          </a>
+        </div>
+      {% endif %}
+    </div>
   </div>
 </section>
+
+<style>
+.tab-btn.active {
+  color: #4f46e5;
+  border-bottom-color: #4f46e5;
+}
+
+.tab-btn:hover {
+  color: #4f46e5;
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.changelog-content h2 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 2rem 0 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.changelog-content h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.changelog-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.changelog-content ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.changelog-content li {
+  margin: 0.5rem 0;
+}
+
+.changelog-content code {
+  background-color: #f3f4f6;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-family: 'Monaco', 'Courier New', monospace;
+  color: #e11d48;
+}
+
+.changelog-content a {
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.changelog-content a:hover {
+  text-decoration: underline;
+}
+</style>
+
+<script>
+// Tab switching functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+
+      // Remove active class from all tabs and contents
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabContents.forEach(c => {
+        c.classList.remove('active');
+        c.style.display = 'none';
+      });
+
+      // Add active class to clicked tab and corresponding content
+      btn.classList.add('active');
+      const activeContent = document.querySelector(`[data-tab-content="${tab}"]`);
+      if (activeContent) {
+        activeContent.classList.add('active');
+        activeContent.style.display = 'block';
+      }
+    });
+  });
+});
+</script>

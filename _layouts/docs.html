@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include head.html %}
+<body class="docs-page">
+  {% include header.html %}
+
+  <div class="docs-container">
+    <!-- Sidebar Navigation -->
+    {% include docs_sidebar.html %}
+
+    <!-- Main Content Area -->
+    <main class="docs-content">
+      <!-- Breadcrumbs -->
+      <nav class="docs-breadcrumbs" aria-label="Breadcrumb">
+        <a href="{{ '/' | relative_url }}">Home</a>
+        <span class="separator">/</span>
+        <a href="{{ '/docs/' | relative_url }}">Documentation</a>
+        {% if page.category %}
+        <span class="separator">/</span>
+        <span>{{ page.category | replace: "-", " " | capitalize }}</span>
+        {% endif %}
+      </nav>
+
+      <!-- Content with TOC -->
+      <div class="docs-body">
+        <article class="docs-article">
+          {{ content }}
+        </article>
+
+        {% if page.toc %}
+        <aside class="docs-toc">
+          <h4>On this page</h4>
+          <nav id="table-of-contents"></nav>
+        </aside>
+        {% endif %}
+      </div>
+
+      <!-- Footer Navigation (Prev/Next) -->
+      {% include docs_footer_nav.html %}
+    </main>
+  </div>
+
+  {% include footer.html %}
+
+  <script src="{{ '/assets/js/docs.js' | relative_url }}"></script>
+</body>
+</html>

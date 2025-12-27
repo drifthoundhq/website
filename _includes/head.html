@@ -5,6 +5,16 @@
 
   {% seo %}
 
+  <!-- Page-specific meta tags -->
+  {% if page.description %}
+    <meta name="description" content="{{ page.description }}">
+    <meta property="og:description" content="{{ page.description }}">
+  {% endif %}
+
+  {% if page.layout == "docs" %}
+    <link rel="canonical" href="{{ page.url | absolute_url }}">
+  {% endif %}
+
   <!-- Organization structured data for Google logo display -->
   <script type="application/ld+json">
   {
@@ -27,4 +37,9 @@
   <link rel="manifest" href="{{ '/site.webmanifest' | relative_url }}">
 
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+
+  <!-- Documentation-specific CSS -->
+  {% if page.layout == "docs" %}
+  <link rel="stylesheet" href="{{ '/assets/css/docs.css' | relative_url }}">
+  {% endif %}
 </head>

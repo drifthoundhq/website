@@ -30,6 +30,9 @@ exclude:
   - vendor/
   - .git/
   - .gitignore
+  - drifthound-source/
+  - drifthound-action-source/
+  - scripts/
 
 # SEO
 logo: /assets/images/drifthound_logo.png
@@ -41,9 +44,19 @@ social:
   links:
     - https://github.com/drifthoundhq/drifthound
 
-# Links
+# External Links
 github_repo: "https://github.com/drifthoundhq/drifthound"
 github_docs: "https://github.com/drifthoundhq/drifthound?tab=readme-ov-file#documentation"
 github_action: "https://github.com/drifthoundhq/drifthound-action"
 helm_chart: "https://github.com/drifthoundhq/helm-chart"
 docker_image: "ghcr.io/drifthoundhq/drifthound"
+
+# Internal Documentation Links
+docs_url: "/docs/"
+docs_getting_started: "/docs/getting-started/"
+docs_api: "/docs/core/api-usage/"
+docs_cli: "/docs/core/cli-usage/"
+docs_configuration: "/docs/core/configuration/"
+docs_slack: "/docs/core/slack-notifications/"
+docs_github_action: "/docs/github-action/quickstart/"
+changelog_url: "/changelog/"

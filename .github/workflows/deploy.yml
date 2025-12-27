@@ -4,6 +4,8 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'  # Daily at midnight
 
 permissions:
   contents: read
@@ -18,26 +20,56 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout drifthound-web
         uses: actions/checkout@v4
+        with:
+          path: website
+
+      - name: Checkout DriftHound docs
+        uses: actions/checkout@v4
+        with:
+          repository: drifthoundhq/drifthound
+          path: drifthound-source
+          sparse-checkout: |
+            docs/
+            CHANGELOG.md
+
+      - name: Checkout drifthound-action docs
+        uses: actions/checkout@v4
+        with:
+          repository: drifthoundhq/drifthound-action
+          path: drifthound-action-source
+          sparse-checkout: |
+            docs/
+
+      - name: Sync documentation
+        run: |
+          cd website
+          chmod +x scripts/sync-docs.sh
+          ./scripts/sync-docs.sh
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
           bundler-cache: true
+          working-directory: website
 
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4
 
       - name: Build with Jekyll
-        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        run: |
+          cd website
+          bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/_site
 
   deploy:
     environment:

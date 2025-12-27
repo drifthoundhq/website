@@ -1,0 +1,42 @@
+{% assign all_pages = "" | split: "" %}
+{% for section in site.data.docs_nav.sections %}
+  {% for page_item in section.pages %}
+    {% assign all_pages = all_pages | push: page_item %}
+  {% endfor %}
+{% endfor %}
+
+{% assign current_index = -1 %}
+{% for page_item in all_pages %}
+  {% if page.url == page_item.url %}
+    {% assign current_index = forloop.index0 %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% if current_index != -1 %}
+<nav class="docs-footer-nav" aria-label="Page navigation">
+  <div class="docs-footer-nav-container">
+    {% if current_index > 0 %}
+      {% assign prev_index = current_index | minus: 1 %}
+      {% assign prev_page = all_pages[prev_index] %}
+      <a href="{{ prev_page.url | relative_url }}" class="docs-footer-nav-link docs-footer-nav-prev">
+        <span class="docs-footer-nav-label">Previous</span>
+        <span class="docs-footer-nav-title">{{ prev_page.title }}</span>
+      </a>
+    {% else %}
+      <div></div>
+    {% endif %}
+
+    {% assign next_index = current_index | plus: 1 %}
+    {% if next_index < all_pages.size %}
+      {% assign next_page = all_pages[next_index] %}
+      <a href="{{ next_page.url | relative_url }}" class="docs-footer-nav-link docs-footer-nav-next">
+        <span class="docs-footer-nav-label">Next</span>
+        <span class="docs-footer-nav-title">{{ next_page.title }}</span>
+      </a>
+    {% else %}
+      <div></div>
+    {% endif %}
+  </div>
+</nav>
+{% endif %}
