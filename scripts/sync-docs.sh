@@ -16,7 +16,7 @@ echo "Action source: $ACTION_SOURCE"
 # Extract version from DriftHound source
 if [ -f "$DRIFTHOUND_SOURCE/lib/drifthound/version.rb" ]; then
   echo "Extracting version from DriftHound..."
-  VERSION=$(grep 'Version = ' "$DRIFTHOUND_SOURCE/lib/drifthound/version.rb" | sed 's/.*Version = "\(.*\)"/\1/')
+  VERSION=$(sed -n 's/.*Version = "\([^"]*\)".*/\1/p' "$DRIFTHOUND_SOURCE/lib/drifthound/version.rb")
   echo "Found version: $VERSION"
 
   # Update _config.yml version
