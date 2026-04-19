@@ -33,6 +33,7 @@ jobs:
           sparse-checkout: |
             docs/
             CHANGELOG.md
+            lib/drifthound/version.rb
 
       - name: Checkout drifthound-action docs
         uses: actions/checkout@v4
